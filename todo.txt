@@ -1,0 +1,8 @@
+x 2022-01-03 Basic boilerplate code +core
+x 2022-01-03 Class system +core
+(A) 2022-01-03 Scene system +core
+(A) 2022-01-03 Camera system +core
+(A) 2022-01-03 LDTK importer that supports the above two +core +ldtk
+(A) 2022-01-03 Entity system that supports the above two +core +ldtk
+x (B) 2022-01-03 Debug console +debug
+(D) 2022-01-03 Add hot-reloading for scripts, or way to reload all scripts in the console
