@@ -1,12 +1,12 @@
 -- Boilerplate initialization
-package.path = ";src" .. package.path -- Add the source directory to path
+package.path = ";src.\\?.lua;lib.\\?.lua;" .. package.path -- Add the source directory to path
 love.graphics.setDefaultFilter("nearest", "nearest") -- This is a pixel art game!
 
 -- imports
 local Console = require 'debug/console'
 require 'debug/commands'
 
-local TestScene = require 'scene/testScene'
+local LdtkScene = require 'scene/ldtkScene'
 
 -- Create a canvas to be used for rendering the pixel art assets at higher resolutions
 -- Note: this is applied to the window size (i.e. scale of 2 takes half the window size)
@@ -33,7 +33,7 @@ function love.load()
     -- set the main canvas to the right size
     resizeMainCanvas(love.graphics.getWidth(),love.graphics.getHeight())
 
-    pushScene(TestScene())
+    pushScene(LdtkScene('res/example_level.ldtk'))
 end
 
 function love.update(dt)

@@ -15,7 +15,8 @@
     local entity_instance = Entity()
 
     -- Extension
-    local Player = Class:extend(Entity)
+    local Player = Class 'Player'
+    Player:extend(Entity)
     local player_instance = Player()
 ]]
 
