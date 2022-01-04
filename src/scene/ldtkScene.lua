@@ -1,11 +1,10 @@
-local class = require 'class'
+local class = require '30log'
 local lunajson = require 'lib/lunajson'
 
 -- Set up scene
-local ldtkScene = class 'LdtkScene'
-ldtkScene:extend(require('scene/scene'))
+local LdtkScene = require('scene/scene'):extend("LdtkScene")
 
-function ldtkScene:init(path)
+function LdtkScene:init(path)
     print('Loading scene from ' .. path)
 
     -- read data
@@ -38,18 +37,26 @@ function ldtkScene:init(path)
         for j=1,#lv.layerInstances do
             local layer = lv.layerInstances[j]
             if layer.__type == 'Tiles' or layer.__type == 'AutoLayer' or (layer.__type == 'IntGrid' and layer.autoLayerTiles) then
-                layer.canvas = love.graphics.newCanvas(lv.pxWid,lv.pixHei)
+                layer.canvas = love.graphics.newCanvas(lv.pxWid,lv.pxHei)
+                -- figure out what array of tiles to draw
+                layer.tileArray = layer.gridTiles
+                if not layer.tileArray or #layer.tileArray == 0 then
+                    layer.tileArray = layer.autoLayerTiles
+                end
             end
         end
     end
     self:redrawTileLayers()
 
+    -- basic camera movement
+    self.x = 0
+    self.y = 0
+
 end
 
 -- Loop over every level/layer and redraw canvases
-function ldtkScene:redrawTileLayers()
-    for i=1,#json.levels do
-        local lv = json.levels[i]
+function LdtkScene:redrawTileLayers()
+    for id, lv in pairs(self.levels) do
         -- Draw each layer in the canvas
         for j=1,#lv.layerInstances do
             local layer = lv.layerInstances[j]
@@ -62,12 +69,20 @@ function ldtkScene:redrawTileLayers()
                 love.graphics.setCanvas(layer.canvas)
 
                 love.graphics.clear(0,0,0,0)
-                local tileArray = layer.gridTiles or layer.autoLayerTiles
+                love.graphics.setColor(1,1,1)
+
+                -- get array of tiles
+                local tileArray = layer.tileArray
+
                 for _, t in ipairs(tileArray) do
-
                     local tile = love.graphics.newQuad(t.src[1],t.src[2],layer.__gridSize,layer.__gridSize,timg)
-                    love.graphics.draw(timg,tile,t.px[1],t.px[2])
 
+                    -- flip the sprite based on it's bit flags
+                    local sx = (t.f == 1 or t.f == 3) and -1 or 1
+                    local sy = (t.f == 2 or t.f == 3) and -1 or 1
+
+                    -- TODO remove magic numbers
+                    love.graphics.draw(timg,tile,t.px[1]+8,t.px[2]+8,0,sx,sy,8,8)
                 end
 
                 -- reset canvas
@@ -77,21 +92,35 @@ function ldtkScene:redrawTileLayers()
     end
 end
 
-function ldtkScene:update()
+function LdtkScene:update(dt)
+    -- move
+    if love.keyboard.isDown('a') then self.x = self.x + dt * 128 end
+    if love.keyboard.isDown('d') then self.x = self.x - dt * 128 end
+    if love.keyboard.isDown('w') then self.y = self.y + dt * 128 end
+    if love.keyboard.isDown('s') then self.y = self.y - dt * 128 end
 end
 
-function ldtkScene:draw()
+function LdtkScene:draw()
+
+    love.graphics.push()
+    love.graphics.translate(self.x,self.y)
+
+    love.graphics.setColor(1,1,1)
     -- Draw levels
-    for i=1,#json.levels do
-        local lv = json.levels[i]
+    for id, lv in pairs(self.levels) do
+
         -- Draw each layer in the canvas
         for j=1,#lv.layerInstances do
             local layer = lv.layerInstances[j]
             if layer.canvas then
+                -- draw level boundaries (DEBUG)
+                love.graphics.rectangle('line',lv.worldX,lv.worldY,lv.pxWid,lv.pxHei)
                 love.graphics.draw(layer.canvas,lv.worldX+layer.pxOffsetX,lv.worldY+layer.pxOffsetY)
             end
         end
     end
+
+    love.graphics.pop()
 end
 
-return ldtkScene
+return LdtkScene

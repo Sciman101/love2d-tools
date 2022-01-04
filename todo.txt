@@ -2,8 +2,10 @@ x 2022-01-03 Basic boilerplate code +core
 x 2022-01-03 Class system +core
 x (A) 2022-01-03 Scene system +core
 (A) 2022-01-03 Camera system +core
-(A) 2022-01-03 LDTK importer that supports the above two +core +ldtk
+x (A) 2022-01-03 LDTK importer that supports the above two +core +ldtk
 (A) 2022-01-03 Entity system that supports the above two +core +ldtk
 x (B) 2022-01-03 Debug console +debug
 (D) 2022-01-03 Add hot-reloading for scripts, or way to reload all scripts in the console
 (D) 2022-01-03 Way to implement simple transitions between scenes (dissolve, push, fade, etc)
+(B) 2022-01-04 Add background rendering to ldtk scenes +ldtk
+(A) 2022-01-04 Clean up ldtk importer, remove unneeded data +ldtk

@@ -1,6 +1,10 @@
-local class = require 'class'
-
+--[[
+    Scene class, holds all the base functionality for a class
+    All scene types inherit from this
+]]
+local class = require '30log'
 local Scene = class 'Scene'
+
 function Scene:init()
 end
 
