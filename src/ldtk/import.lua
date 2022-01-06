@@ -87,7 +87,7 @@ return function(path)
 			y = level.worldY,
 			neighbors = level.__neighbors,
 			fields = {},
-			layers = {}
+			layers = {},
 		}
 		-- copy background
 		if level.__bgColor then
@@ -133,8 +133,9 @@ return function(path)
 			end
 
 			-- Copy entities
+			-- This isn't meant to be data used by the game directly so much as entity information to have copied over into actual entities
 			if #layer.entityInstances > 0 then
-				newLayer.entities = {}
+				newLayer.entityData = {}
 				for _, entity in ipairs(layer.entityInstances) do
 					local newEntity = {
 						x = entity.px[1],
@@ -148,7 +149,7 @@ return function(path)
 					end
 
 					-- put into layer
-					newLayer.entities[#newLayer.entities+1] = newEntity
+					newLayer.entityData[#newLayer.entityData+1] = newEntity
 				end
 			end
 

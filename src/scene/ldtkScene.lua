@@ -1,7 +1,5 @@
 local class = require '30log'
 local lunajson = require 'lib/lunajson'
-local colorHelper = require 'util/colorHelper'
-
 -- Set up scene
 local LdtkScene = require('scene/scene'):extend("LdtkScene")
 
