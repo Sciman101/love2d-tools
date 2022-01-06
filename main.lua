@@ -7,6 +7,7 @@ local Console = require 'debug/console'
 require 'debug/commands'
 
 local LdtkScene = require 'scene/ldtkScene'
+local ldtk_import = require 'ldtk/import'
 
 -- Create a canvas to be used for rendering the pixel art assets at higher resolutions
 -- Note: this is applied to the window size (i.e. scale of 2 takes half the window size)
@@ -33,7 +34,8 @@ function love.load()
     -- set the main canvas to the right size
     resizeMainCanvas(love.graphics.getWidth(),love.graphics.getHeight())
 
-    pushScene(LdtkScene('res/example_level.ldtk'))
+    local example_level = ldtk_import('res/example_level.ldtk')
+    pushScene(LdtkScene(example_level))
 end
 
 function love.update(dt)
@@ -85,7 +87,7 @@ function love.textinput(text)
     Console.textinput(text)
 end
 function love.wheelmoved(x,y)
-    Console.scroll(y*5)
+    Console.scroll(y*10)
 end
 
 -- non-callback functions

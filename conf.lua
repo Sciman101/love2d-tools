@@ -3,7 +3,7 @@ function love.conf(t)
     t.appendidentity = false            -- Search files in source directory before save directory (boolean)
     t.version = "11.3"                  -- The LÖVE version this game was made for (string)
     t.gammacorrect = false              -- Enable gamma-correct rendering, when supported by the system (boolean)
-    t.console = false
+    t.console = true
 
     t.window.title = "Untitled"         -- The window title (string)
     t.window.icon = nil                 -- Filepath to an image to use as the window's icon (string)

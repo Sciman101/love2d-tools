@@ -106,6 +106,7 @@ function Console.textinput(text)
         love.keyboard.setKeyRepeat(Console.visible)
         return
     end
+    if not Console.visible then return end
     -- Append input
     Console.currentInput = Console.currentInput .. text
 end
@@ -124,7 +125,7 @@ function Console.print(message,context)
 end
 
 function Console.scroll(amt)
-    Console.scrollAmount = Console.scrollAmount + amt
+    Console.scrollAmount = Console.scrollAmount - amt
 
     -- don't scroll if we have a small amount of messages
     local lineCount = #Console.lines
@@ -244,5 +245,6 @@ Console.registerCommand('help','lists all commands','help [command]',function(ar
     end
 end)
 Console.registerCommand('quit','quits the game','quit',function(args) love.event.quit(0) end)
+Console.registerCommand('clear','clear the console','clear',function() Console.lines = {} Console.linesContext = {} end)
 
 return Console
