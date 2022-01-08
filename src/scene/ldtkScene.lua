@@ -13,6 +13,15 @@ function LdtkScene:init(world)
 end
 
 function LdtkScene:update(dt)
+
+    -- update entities
+    for i=1,#self.world.levels do
+        local level = self.world.levels[i]
+        for id, entity in pairs(level.entityIdMap) do
+            entity:update(dt)
+        end
+    end
+
     -- move
     if love.keyboard.isDown('a') then self.x = self.x + 8 end
     if love.keyboard.isDown('d') then self.x = self.x - 8 end
@@ -46,6 +55,7 @@ function LdtkScene:draw()
 
         -- Draw each layer in the canvas
         for j=1,#lv.layers do
+            love.graphics.setColor(1,1,1)
             local layer = lv.layers[j]
             if layer.canvas then
                 love.graphics.draw(layer.canvas,lv.x+layer.xoff,lv.y+layer.yoff)
@@ -54,7 +64,15 @@ function LdtkScene:draw()
                 love.graphics.rectangle('line',lv.x,lv.y,lv.width,lv.height)
                 love.graphics.print(lv.name,lv.x+8,lv.y+8)
             end
+
+            -- Draw layer entities
+            if layer.entities then
+                for e=1,#layer.entities do
+                    layer.entities[e]:draw()
+                end
+            end
         end
+
     end
 
     love.graphics.pop()

@@ -422,7 +422,7 @@
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "FitInside",
-			"maxCount": 0,
+			"maxCount": 1,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
 			"pivotX": 0.5,
@@ -496,13 +496,13 @@
 					"entityInstances": [
 						{
 							"__identifier": "Player",
-							"__grid": [2,7],
+							"__grid": [2,8],
 							"__pivot": [0.5,1],
 							"__tile": null,
 							"width": 16,
 							"height": 24,
 							"defUid": 56,
-							"px": [40,128],
+							"px": [40,144],
 							"fieldInstances": []
 						}
 					]

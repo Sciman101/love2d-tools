@@ -1,5 +1,7 @@
 local lunajson = require 'lib/lunajson'
 local colorHelper = require 'util/colorHelper'
+local entity_types = require 'entity/entities'
+local Console = require 'debug/console'
 
 -- Function assigned to layers to allow them to redraw themselves
 function redrawLayers(world)
@@ -88,6 +90,7 @@ return function(path)
 			neighbors = level.__neighbors,
 			fields = {},
 			layers = {},
+			entityIdMap = {},
 		}
 		-- copy background
 		if level.__bgColor then
@@ -135,9 +138,30 @@ return function(path)
 			-- Copy entities
 			-- This isn't meant to be data used by the game directly so much as entity information to have copied over into actual entities
 			if #layer.entityInstances > 0 then
-				newLayer.entityData = {}
-				for _, entity in ipairs(layer.entityInstances) do
-					local newEntity = {
+				newLayer.entities = {}
+				for _, entityData in ipairs(layer.entityInstances) do
+
+					-- does this entity type exist?
+					if entity_types[entityData.__identifier] then
+
+						-- instance it
+						local newEntity = entity_types[entityData.__identifier](entityData.px[1],entityData.px[2])
+						-- copy fields
+						for _, field in ipairs(entityData.fieldInstances) do
+							if newEntity[field.__identifier] then
+								newEntity[field.__identifier] = field.__value
+							end
+						end
+
+						-- add to arrays
+						newLayer.entities[#newLayer.entities+1] = newEntity
+						newLevel.entityIdMap[newEntity.uid] = newEntity
+
+					else
+						Console.print("Attempted to spawn unknown entity type '" .. entityData.__identifier .. "'",Console.ERROR)
+					end
+
+					--[[local newEntity = {
 						x = entity.px[1],
 						y = entity.px[2],
 						type = entity.__identifier,
@@ -149,7 +173,7 @@ return function(path)
 					end
 
 					-- put into layer
-					newLayer.entityData[#newLayer.entityData+1] = newEntity
+					newLayer.entityData[#newLayer.entityData+1] = newEntity]]
 				end
 			end
 

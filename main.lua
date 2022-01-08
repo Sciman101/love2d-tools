@@ -28,6 +28,8 @@ do
     end
 end
 
+local dtext = require 'dialougeText'
+
 -- game start
 function love.load()
     Console.print("love2d-tools loaded! type 'help' to see all commands","START")
@@ -62,6 +64,8 @@ function love.draw()
         love.graphics.setColor(0,0,0)
         love.graphics.print("No scene loaded :/",16,16)
     end
+
+    dtext("Hello, world!\nThis is a ^test!^\n*Pretty neat!*\n_thick text_",16,16,100)
     -- end normal drawing
 
     -- Reset canvas and draw

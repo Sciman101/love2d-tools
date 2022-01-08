@@ -15,11 +15,15 @@ local Console = {
 
     history = {},
 
+    -- Contextx
+    INFO = 1,
+    ERROR = 2,
+
     currentInput = "", -- The command being currently edited
 }
 
 local consoleColors = {
-    ERROR = {1,0.1,0}
+    [Console.ERROR] = {1,0.1,0}
 }
 
 local commands = {}
@@ -79,7 +83,7 @@ function Console.keypressed(key,code,isRepeat)
     if love.keyboard.isDown('lctrl') then
         if key == 'c' then
             love.system.setClipboardText(Console.currentInput)
-            Console.print("Text copied to clipboard!","INFO")
+            Console.print("Text copied to clipboard!",Console.INFO)
         elseif key == 'v' then
             Console.currentInput = Console.currentInput .. love.system.getClipboardText()
         end
@@ -113,12 +117,12 @@ end
 
 -- Put a message in the console
 function Console.print(message,context)
-    context = context or "DEBUG"
+    context = context or Console.INFO
     Console.lines[#Console.lines+1] = message
     Console.linesContext[#Console.linesContext+1] = context
 
     -- errors are important!
-    if context == "ERROR" then
+    if context == Console.ERROR then
         Console.visible = true
         love.keyboard.setKeyRepeat(true)
     end
@@ -208,7 +212,7 @@ function Console.execute()
         if cmd then
             cmd.callback(args)
         else
-            Console.print("Unknown command '" .. args[1] .. "'","ERROR")
+            Console.print("Unknown command '" .. args[1] .. "'",Console.ERROR)
         end
     end
 end
@@ -223,7 +227,7 @@ do
         for i,v in ipairs(msg) do
             result = result .. tostring(v) .. "\t"
         end
-        Console.print(result,"INFO")
+        Console.print(result)
         -- do normal print
         oldPrint(...)
     end
